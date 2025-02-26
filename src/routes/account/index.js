@@ -12,7 +12,15 @@ router.get("/register", async (req, res) => {
 router.post("/register", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  if (!email || !password) {
+  const confirmPassword = req.body.confirmPassword;
+  if (!email || !password || !confirmPassword) {
+    req.flash("error", "All fields are required.");
+    res.redirect("/account/register");
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    req.flash("error", "Passwords do not match.");
     res.redirect("/account/register");
     return;
   }
@@ -20,10 +28,12 @@ router.post("/register", async (req, res) => {
   const result = await registerUser(email, password);
 
   if (result.changes === 1) {
+    req.flash("success", "Registration successful. You can now log in.");
     res.redirect("/account/login");
     return;
   }
 
+  req.flash("error", "Registration failed. Please try again.");
   res.redirect("/account/register");
 });
 
