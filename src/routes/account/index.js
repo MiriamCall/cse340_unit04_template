@@ -1,10 +1,40 @@
 import { Router } from "express";
 import { registerUser, verifyUser } from "../../models/account/index.js";
+import { body, validationResult } from "express-validator";
+import { requireAuth } from "../utils/index.js";
 
 const router = Router();
 
+// Your registered account route handler
+app.get("/", requireAuth, (req, res) => { ... });
+
+
+// Build an array of validation checks for the registration route
+const registrationValidation = [
+  body("email").isEmail().withMessage("Invalid email format."),
+  body("password")
+    .matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/)
+    .withMessage(
+      "Password must be at least 8 characters long, include one uppercase letter, one number, and one symbol."
+    ),
+];
+
+// Apply the validation checks to the registration route
+router.post("/register", registrationValidation, async (req, res) => {
+  // Check if there are any validation errors
+  const results = validationResult(req);
+  if (results.errors.length > 0) {
+    results.errors.forEach((error) => {
+      req.flash("error", error.msg);
+    });
+    res.redirect("/account/register");
+    return;
+  }
+});
+
 // Register a new user route (view)
 router.get("/register", async (req, res) => {
+  res.locals.scripts.push("<script src='/js/registration.js'></script>");
   res.render("account/register", { title: "Register" });
 });
 
