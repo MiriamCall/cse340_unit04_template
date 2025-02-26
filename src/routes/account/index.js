@@ -1,13 +1,14 @@
 import { Router } from "express";
 import { registerUser, verifyUser } from "../../models/account/index.js";
 import { body, validationResult } from "express-validator";
-import { requireAuth } from "../utils/index.js";
+import { requireAuth } from "../../utils/index.js";
 
 const router = Router();
 
 // Your registered account route handler
-app.get("/", requireAuth, (req, res) => { ... });
-
+router.get("/", requireAuth, (req, res) => {
+  res.send(`Welcome, ${req.session.user.username}!`);
+});
 
 // Build an array of validation checks for the registration route
 const registrationValidation = [
