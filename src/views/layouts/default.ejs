@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head') %>
+  </head>
+  <body>
+    <header><%- include('../partials/header') %></header>
+    <main>
+      <% if (flash) { %> <% flash.forEach((obj) => { %> <%-
+      include('../partials/flash', { type: obj.type, message: obj.message }) %>
+      <% }); %> <% } %> <%- body %>
+    </main>
+    <footer><%- include('../partials/footer') %></footer>
+  </body>
+</html>
