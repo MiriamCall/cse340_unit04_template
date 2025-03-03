@@ -82,6 +82,9 @@ router.post("/login", async (req, res) => {
     return;
   }
 
+  delete user.password;
+  req.session.user = userTrue;
+
   const user = await verifyUser(email, password);
 
   if (user) {
@@ -92,5 +95,9 @@ router.post("/login", async (req, res) => {
 
   res.redirect("/account/login");
 });
+
+//get /account
+
+//get /account/logout
 
 export default router;

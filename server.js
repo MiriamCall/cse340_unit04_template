@@ -35,7 +35,7 @@ const app = express();
 const sqliteSessionStore = sqlite(session);
 
 // Configure the application based on environment settings
-app.use(configNodeEnv);
+app.use(configNodeEnv); //move this below session
 
 // Configure session middleware
 app.use(
